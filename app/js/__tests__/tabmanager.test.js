@@ -1,4 +1,7 @@
-/* @flow */
+/**
+ * @jest-environment jsdom
+ * @flow
+ */
 
 import TabManager from "../tabmanager";
 import configureMockStore from "../__mocks__/configureMockStore";
