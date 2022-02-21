@@ -102,4 +102,19 @@ module.exports = [
       }),
     ]),
   }),
+  Object.assign({}, COMMON_CONFIG, {
+    name: "safari",
+    output: {
+      path: path.join(__dirname, "dist", "safari"),
+      filename: "[name].entry.js",
+    },
+    plugins: COMMON_CONFIG.plugins.concat([
+      new webpack.DefinePlugin({
+        EXTENSION_URL: JSON.stringify(
+          "https://example.com/tabwrangler/"
+        ),
+        BROWSER: JSON.stringify("safari"),
+      }),
+    ]),
+  }),
 ];

@@ -30,21 +30,30 @@
 		163ABE8827BD7C0D00F69242 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 163ABE3F27BD7C0C00F69242 /* SafariWebExtensionHandler.swift */; };
 		163ABE8927BD7C0D00F69242 /* SafariWebExtensionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 163ABE3F27BD7C0C00F69242 /* SafariWebExtensionHandler.swift */; };
 		163ABE8A27BD7C0D00F69242 /* _locales in Resources */ = {isa = PBXBuildFile; fileRef = 163ABE4127BD7C0C00F69242 /* _locales */; };
-		163ABE8B27BD7C0D00F69242 /* _locales in Resources */ = {isa = PBXBuildFile; fileRef = 163ABE4127BD7C0C00F69242 /* _locales */; };
 		163ABE8C27BD7C0D00F69242 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 163ABE4227BD7C0C00F69242 /* images */; };
-		163ABE8D27BD7C0D00F69242 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 163ABE4227BD7C0C00F69242 /* images */; };
 		163ABE8E27BD7C0D00F69242 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 163ABE4327BD7C0C00F69242 /* manifest.json */; };
-		163ABE8F27BD7C0D00F69242 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 163ABE4327BD7C0C00F69242 /* manifest.json */; };
 		163ABE9027BD7C0D00F69242 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 163ABE4427BD7C0C00F69242 /* background.js */; };
-		163ABE9127BD7C0D00F69242 /* background.js in Resources */ = {isa = PBXBuildFile; fileRef = 163ABE4427BD7C0C00F69242 /* background.js */; };
 		163ABE9227BD7C0D00F69242 /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = 163ABE4527BD7C0C00F69242 /* content.js */; };
-		163ABE9327BD7C0D00F69242 /* content.js in Resources */ = {isa = PBXBuildFile; fileRef = 163ABE4527BD7C0C00F69242 /* content.js */; };
 		163ABE9427BD7C0D00F69242 /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = 163ABE4627BD7C0C00F69242 /* popup.html */; };
-		163ABE9527BD7C0D00F69242 /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = 163ABE4627BD7C0C00F69242 /* popup.html */; };
 		163ABE9627BD7C0D00F69242 /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = 163ABE4727BD7C0C00F69242 /* popup.css */; };
-		163ABE9727BD7C0D00F69242 /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = 163ABE4727BD7C0C00F69242 /* popup.css */; };
 		163ABE9827BD7C0D00F69242 /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = 163ABE4827BD7C0C00F69242 /* popup.js */; };
-		163ABE9927BD7C0D00F69242 /* popup.js in Resources */ = {isa = PBXBuildFile; fileRef = 163ABE4827BD7C0C00F69242 /* popup.js */; };
+		16B5BC3527C2D5A600C002F4 /* MIT-LICENSE.txt in Resources */ = {isa = PBXBuildFile; fileRef = 16B5BC2427C2D5A500C002F4 /* MIT-LICENSE.txt */; };
+		16B5BC3627C2D5A600C002F4 /* commons.entry.js.map in Resources */ = {isa = PBXBuildFile; fileRef = 16B5BC2527C2D5A500C002F4 /* commons.entry.js.map */; };
+		16B5BC3727C2D5A600C002F4 /* manifest.json in Resources */ = {isa = PBXBuildFile; fileRef = 16B5BC2627C2D5A500C002F4 /* manifest.json */; };
+		16B5BC3827C2D5A600C002F4 /* background.entry.js.map in Resources */ = {isa = PBXBuildFile; fileRef = 16B5BC2727C2D5A500C002F4 /* background.entry.js.map */; };
+		16B5BC3927C2D5A600C002F4 /* popup.css in Resources */ = {isa = PBXBuildFile; fileRef = 16B5BC2827C2D5A500C002F4 /* popup.css */; };
+		16B5BC3A27C2D5A600C002F4 /* background.entry.js in Resources */ = {isa = PBXBuildFile; fileRef = 16B5BC2927C2D5A500C002F4 /* background.entry.js */; };
+		16B5BC3B27C2D5A600C002F4 /* 4896d4b04430cc3dfb063d0df45e14d9.woff2 in Resources */ = {isa = PBXBuildFile; fileRef = 16B5BC2A27C2D5A500C002F4 /* 4896d4b04430cc3dfb063d0df45e14d9.woff2 */; };
+		16B5BC3C27C2D5A600C002F4 /* 03e9bc2cfe76c1bb5aa7.woff2 in Resources */ = {isa = PBXBuildFile; fileRef = 16B5BC2B27C2D5A500C002F4 /* 03e9bc2cfe76c1bb5aa7.woff2 */; };
+		16B5BC3D27C2D5A600C002F4 /* popup.css.map in Resources */ = {isa = PBXBuildFile; fileRef = 16B5BC2C27C2D5A500C002F4 /* popup.css.map */; };
+		16B5BC3E27C2D5A600C002F4 /* popup.entry.js.map in Resources */ = {isa = PBXBuildFile; fileRef = 16B5BC2D27C2D5A500C002F4 /* popup.entry.js.map */; };
+		16B5BC3F27C2D5A600C002F4 /* background.html in Resources */ = {isa = PBXBuildFile; fileRef = 16B5BC2E27C2D5A500C002F4 /* background.html */; };
+		16B5BC4027C2D5A600C002F4 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 16B5BC2F27C2D5A600C002F4 /* README.md */; };
+		16B5BC4127C2D5A600C002F4 /* _locales in Resources */ = {isa = PBXBuildFile; fileRef = 16B5BC3027C2D5A600C002F4 /* _locales */; };
+		16B5BC4227C2D5A600C002F4 /* popup.entry.js in Resources */ = {isa = PBXBuildFile; fileRef = 16B5BC3127C2D5A600C002F4 /* popup.entry.js */; };
+		16B5BC4327C2D5A600C002F4 /* img in Resources */ = {isa = PBXBuildFile; fileRef = 16B5BC3227C2D5A600C002F4 /* img */; };
+		16B5BC4427C2D5A600C002F4 /* popup.html in Resources */ = {isa = PBXBuildFile; fileRef = 16B5BC3327C2D5A600C002F4 /* popup.html */; };
+		16B5BC4527C2D5A600C002F4 /* commons.entry.js in Resources */ = {isa = PBXBuildFile; fileRef = 16B5BC3427C2D5A600C002F4 /* commons.entry.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -120,6 +129,23 @@
 		163ABE7527BD7C0D00F69242 /* tabwrangler Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "tabwrangler Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
 		163ABE7A27BD7C0D00F69242 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		163ABE7B27BD7C0D00F69242 /* tabwrangler.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = tabwrangler.entitlements; sourceTree = "<group>"; };
+		16B5BC2427C2D5A500C002F4 /* MIT-LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; name = "MIT-LICENSE.txt"; path = "../dist/safari/MIT-LICENSE.txt"; sourceTree = "<group>"; };
+		16B5BC2527C2D5A500C002F4 /* commons.entry.js.map */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = commons.entry.js.map; path = ../dist/safari/commons.entry.js.map; sourceTree = "<group>"; };
+		16B5BC2627C2D5A500C002F4 /* manifest.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = manifest.json; path = ../dist/safari/manifest.json; sourceTree = "<group>"; };
+		16B5BC2727C2D5A500C002F4 /* background.entry.js.map */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = background.entry.js.map; path = ../dist/safari/background.entry.js.map; sourceTree = "<group>"; };
+		16B5BC2827C2D5A500C002F4 /* popup.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = popup.css; path = ../dist/safari/popup.css; sourceTree = "<group>"; };
+		16B5BC2927C2D5A500C002F4 /* background.entry.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = background.entry.js; path = ../dist/safari/background.entry.js; sourceTree = "<group>"; };
+		16B5BC2A27C2D5A500C002F4 /* 4896d4b04430cc3dfb063d0df45e14d9.woff2 */ = {isa = PBXFileReference; lastKnownFileType = file; name = 4896d4b04430cc3dfb063d0df45e14d9.woff2; path = ../dist/safari/4896d4b04430cc3dfb063d0df45e14d9.woff2; sourceTree = "<group>"; };
+		16B5BC2B27C2D5A500C002F4 /* 03e9bc2cfe76c1bb5aa7.woff2 */ = {isa = PBXFileReference; lastKnownFileType = text; name = 03e9bc2cfe76c1bb5aa7.woff2; path = ../dist/safari/03e9bc2cfe76c1bb5aa7.woff2; sourceTree = "<group>"; };
+		16B5BC2C27C2D5A500C002F4 /* popup.css.map */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = popup.css.map; path = ../dist/safari/popup.css.map; sourceTree = "<group>"; };
+		16B5BC2D27C2D5A500C002F4 /* popup.entry.js.map */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.module-map"; name = popup.entry.js.map; path = ../dist/safari/popup.entry.js.map; sourceTree = "<group>"; };
+		16B5BC2E27C2D5A500C002F4 /* background.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = background.html; path = ../dist/safari/background.html; sourceTree = "<group>"; };
+		16B5BC2F27C2D5A600C002F4 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../dist/safari/README.md; sourceTree = "<group>"; };
+		16B5BC3027C2D5A600C002F4 /* _locales */ = {isa = PBXFileReference; lastKnownFileType = folder; name = _locales; path = ../dist/safari/_locales; sourceTree = "<group>"; };
+		16B5BC3127C2D5A600C002F4 /* popup.entry.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = popup.entry.js; path = ../dist/safari/popup.entry.js; sourceTree = "<group>"; };
+		16B5BC3227C2D5A600C002F4 /* img */ = {isa = PBXFileReference; lastKnownFileType = folder; name = img; path = ../dist/safari/img; sourceTree = "<group>"; };
+		16B5BC3327C2D5A600C002F4 /* popup.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = popup.html; path = ../dist/safari/popup.html; sourceTree = "<group>"; };
+		16B5BC3427C2D5A600C002F4 /* commons.entry.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = commons.entry.js; path = ../dist/safari/commons.entry.js; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,6 +183,23 @@
 		163ABE3027BD7C0900F69242 = {
 			isa = PBXGroup;
 			children = (
+				16B5BC3027C2D5A600C002F4 /* _locales */,
+				16B5BC2B27C2D5A500C002F4 /* 03e9bc2cfe76c1bb5aa7.woff2 */,
+				16B5BC2A27C2D5A500C002F4 /* 4896d4b04430cc3dfb063d0df45e14d9.woff2 */,
+				16B5BC2927C2D5A500C002F4 /* background.entry.js */,
+				16B5BC2727C2D5A500C002F4 /* background.entry.js.map */,
+				16B5BC2E27C2D5A500C002F4 /* background.html */,
+				16B5BC3427C2D5A600C002F4 /* commons.entry.js */,
+				16B5BC2527C2D5A500C002F4 /* commons.entry.js.map */,
+				16B5BC3227C2D5A600C002F4 /* img */,
+				16B5BC2627C2D5A500C002F4 /* manifest.json */,
+				16B5BC2427C2D5A500C002F4 /* MIT-LICENSE.txt */,
+				16B5BC2827C2D5A500C002F4 /* popup.css */,
+				16B5BC2C27C2D5A500C002F4 /* popup.css.map */,
+				16B5BC3127C2D5A600C002F4 /* popup.entry.js */,
+				16B5BC2D27C2D5A500C002F4 /* popup.entry.js.map */,
+				16B5BC3327C2D5A600C002F4 /* popup.html */,
+				16B5BC2F27C2D5A600C002F4 /* README.md */,
 				163ABE3527BD7C0A00F69242 /* Shared-App */,
 				163ABE3E27BD7C0C00F69242 /* Shared-Extension */,
 				163ABE4F27BD7C0C00F69242 /* iOS-App */,
@@ -429,14 +472,23 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				163ABE9127BD7C0D00F69242 /* background.js in Resources */,
-				163ABE9727BD7C0D00F69242 /* popup.css in Resources */,
-				163ABE9527BD7C0D00F69242 /* popup.html in Resources */,
-				163ABE8D27BD7C0D00F69242 /* images in Resources */,
-				163ABE8F27BD7C0D00F69242 /* manifest.json in Resources */,
-				163ABE8B27BD7C0D00F69242 /* _locales in Resources */,
-				163ABE9327BD7C0D00F69242 /* content.js in Resources */,
-				163ABE9927BD7C0D00F69242 /* popup.js in Resources */,
+				16B5BC3527C2D5A600C002F4 /* MIT-LICENSE.txt in Resources */,
+				16B5BC3627C2D5A600C002F4 /* commons.entry.js.map in Resources */,
+				16B5BC3727C2D5A600C002F4 /* manifest.json in Resources */,
+				16B5BC3827C2D5A600C002F4 /* background.entry.js.map in Resources */,
+				16B5BC3927C2D5A600C002F4 /* popup.css in Resources */,
+				16B5BC3A27C2D5A600C002F4 /* background.entry.js in Resources */,
+				16B5BC3B27C2D5A600C002F4 /* 4896d4b04430cc3dfb063d0df45e14d9.woff2 in Resources */,
+				16B5BC3C27C2D5A600C002F4 /* 03e9bc2cfe76c1bb5aa7.woff2 in Resources */,
+				16B5BC3D27C2D5A600C002F4 /* popup.css.map in Resources */,
+				16B5BC3E27C2D5A600C002F4 /* popup.entry.js.map in Resources */,
+				16B5BC3F27C2D5A600C002F4 /* background.html in Resources */,
+				16B5BC4027C2D5A600C002F4 /* README.md in Resources */,
+				16B5BC4127C2D5A600C002F4 /* _locales in Resources */,
+				16B5BC4227C2D5A600C002F4 /* popup.entry.js in Resources */,
+				16B5BC4327C2D5A600C002F4 /* img in Resources */,
+				16B5BC4427C2D5A600C002F4 /* popup.html in Resources */,
+				16B5BC4527C2D5A600C002F4 /* commons.entry.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -783,13 +835,13 @@
 		163ABEA427BD7C0D00F69242 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "macOS (Extension)/tabwrangler.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "macOS-Extension/tabwrangler.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8M7N9M6DNJ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "macOS (Extension)/Info.plist";
+				INFOPLIST_FILE = "macOS-Extension/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "tabwrangler Extension";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -815,13 +867,13 @@
 		163ABEA527BD7C0D00F69242 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "macOS (Extension)/tabwrangler.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "macOS-Extension/tabwrangler.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8M7N9M6DNJ;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "macOS (Extension)/Info.plist";
+				INFOPLIST_FILE = "macOS-Extension/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "tabwrangler Extension";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -850,7 +902,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "macOS (App)/tabwrangler.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "macOS-App/tabwrangler.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8M7N9M6DNJ;
@@ -885,7 +937,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "macOS (App)/tabwrangler.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "macOS-App/tabwrangler.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 8M7N9M6DNJ;
