@@ -1,6 +1,7 @@
 /* @flow */
 
 import * as React from "react";
+import { browser } from "webextension-polyfill";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function PauseButton(): React.Node {
@@ -19,11 +20,11 @@ export default function PauseButton(): React.Node {
     <button className="btn btn-outline-dark btn-sm" onClick={paused ? play : pause} type="button">
       {paused ? (
         <>
-          <i className="fas fa-play" /> {chrome.i18n.getMessage("extension_resume")}
+          <i className="fas fa-play" /> {browser.i18n.getMessage("extension_resume")}
         </>
       ) : (
         <>
-          <i className="fas fa-pause" /> {chrome.i18n.getMessage("extension_pause")}
+          <i className="fas fa-pause" /> {browser.i18n.getMessage("extension_pause")}
         </>
       )}
     </button>

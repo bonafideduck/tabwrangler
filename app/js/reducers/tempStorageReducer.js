@@ -5,13 +5,13 @@ export type ClearTempStorageAction = {
 };
 
 export type SetCommandsAction = {
-  commands: Array<chrome$Command>,
+  commands: Array<browser$Command>,
   type: "SET_COMMANDS",
 };
 
 type FetchSessionsRequestAction = { type: "FETCH_SESSIONS_REQUEST" };
 type FetchSessionsSuccessAction = {
-  sessions: Array<chrome$Session>,
+  sessions: Array<browser$Session>,
   type: "FETCH_SESSIONS_SUCCESS",
 };
 
@@ -22,8 +22,8 @@ export type Action =
   | SetCommandsAction;
 
 export type State = {
-  commands: Array<chrome$Command>,
-  sessions: Array<chrome$Session>,
+  commands: Array<browser$Command>,
+  sessions: Array<browser$Session>,
 };
 
 export function createInitialState(): State {

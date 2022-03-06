@@ -4,6 +4,7 @@ import "./css/popup.scss";
 import "@fortawesome/fontawesome-free/css/fontawesome.min.css";
 import "./css/fontawesome-free-solid-woff-only.css";
 import "react-virtualized/styles.css";
+import browser from "webextension-polyfill";
 import { PersistGate } from "redux-persist/integration/react";
 import Popup from "./js/Popup";
 import { Provider } from "react-redux";
@@ -15,7 +16,7 @@ const popupElement = document.getElementById("popup");
 
 if (popupElement != null) {
   const ConnectedPopup = connect()(Popup);
-  const TW = chrome.extension.getBackgroundPage().TW;
+  const TW = browser.extension.getBackgroundPage().TW;
 
   ReactDOM.render(
     <Provider store={TW.store}>

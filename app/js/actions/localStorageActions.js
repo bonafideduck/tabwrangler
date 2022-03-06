@@ -13,11 +13,11 @@ export function removeAllSavedTabs(): RemoveAllSavedTabsAction {
   return { type: "REMOVE_ALL_SAVED_TABS" };
 }
 
-export function removeSavedTabs(tabs: Array<chrome$Tab>): RemoveSavedTabsAction {
+export function removeSavedTabs(tabs: Array<browser$Tab>): RemoveSavedTabsAction {
   return { tabs, type: "REMOVE_SAVED_TABS" };
 }
 
-export function setSavedTabs(savedTabs: Array<chrome$Tab>): SetSavedTabsAction {
+export function setSavedTabs(savedTabs: Array<browser$Tab>): SetSavedTabsAction {
   return { savedTabs, type: "SET_SAVED_TABS" };
 }
 

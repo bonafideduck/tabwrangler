@@ -1,5 +1,6 @@
 /* @flow */
 
+import browser from "webextension-polyfill";
 import tabmanager from "./tabmanager";
 
 const defaultCache: { [key: string]: mixed } = {};
@@ -67,7 +68,7 @@ const Settings = {
         keys.push(i);
       }
     }
-    chrome.storage.sync.get(keys, (items) => {
+    browser.storage.sync.get(keys).then((items) => {
       for (const i in items) {
         if (Object.prototype.hasOwnProperty.call(items, i)) {
           this.cache[i] = items[i];
@@ -122,7 +123,7 @@ const Settings = {
   setmaxTabs(value: string) {
     if (isNaN(parseInt(value, 10)) || parseInt(value, 10) < 1 || parseInt(value, 10) > 1000) {
       throw Error(
-        chrome.i18n.getMessage("settings_setmaxTabs_error") || "Error: settings.setmaxTabs"
+        browser.i18n.getMessage("settings_setmaxTabs_error") || "Error: settings.setmaxTabs"
       );
     }
     Settings.setValue("maxTabs", value);
@@ -136,7 +137,7 @@ const Settings = {
   setminTabs(value: string) {
     if (isNaN(parseInt(value, 10)) || parseInt(value, 10) < 0) {
       throw Error(
-        chrome.i18n.getMessage("settings_setminTabs_error") || "Error: settings.setminTabs"
+        browser.i18n.getMessage("settings_setminTabs_error") || "Error: settings.setminTabs"
       );
     }
     Settings.setValue("minTabs", value);
@@ -151,14 +152,14 @@ const Settings = {
     const minutes = parseInt(value, 10);
     if (isNaN(minutes) || minutes < 0) {
       throw Error(
-        chrome.i18n.getMessage("settings_setminutesInactive_error") ||
+        browser.i18n.getMessage("settings_setminutesInactive_error") ||
           "Error: settings.setminutesInactive"
       );
     }
 
     // Reset the tabTimes since we changed the setting
     tabmanager.tabTimes = {};
-    chrome.tabs.query({ windowType: "normal" }, tabmanager.initTabs);
+    browser.tabs.query({ windowType: "normal" }).then(tabmanager.initTabs);
     Settings.setValue("minutesInactive", value);
   },
 
@@ -171,13 +172,13 @@ const Settings = {
     const seconds = parseInt(value, 10);
     if (isNaN(seconds) || seconds < 0 || seconds > 59) {
       throw Error(
-        chrome.i18n.getMessage("settings_setsecondsInactive_error") || "Error: setsecondsInactive"
+        browser.i18n.getMessage("settings_setsecondsInactive_error") || "Error: setsecondsInactive"
       );
     }
 
     // Reset the tabTimes since we changed the setting
     tabmanager.tabTimes = {};
-    chrome.tabs.query({ windowType: "normal" }, tabmanager.initTabs);
+    browser.tabs.query({ windowType: "normal" }).then(tabmanager.initTabs);
     Settings.setValue("secondsInactive", value);
   },
 
@@ -188,7 +189,7 @@ const Settings = {
 
   setValue(key: string, value: mixed, fx?: () => void) {
     this.cache[key] = value;
-    chrome.storage.sync.set({ [key]: value }, fx);
+    browser.storage.sync.set({ [key]: value }).then(fx);
   },
 
   /**

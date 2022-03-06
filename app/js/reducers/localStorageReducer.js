@@ -5,12 +5,12 @@ export type RemoveAllSavedTabsAction = {
 };
 
 export type RemoveSavedTabsAction = {
-  tabs: Array<chrome$Tab>,
+  tabs: Array<browser$Tab>,
   type: "REMOVE_SAVED_TABS",
 };
 
 export type SetSavedTabsAction = {
-  savedTabs: Array<chrome$Tab>,
+  savedTabs: Array<browser$Tab>,
   type: "SET_SAVED_TABS",
 };
 
@@ -42,7 +42,7 @@ export type State = {
   installDate: number,
 
   // Tabs closed by Tab Wrangler
-  savedTabs: Array<chrome$Tab>,
+  savedTabs: Array<browser$Tab>,
 
   // Number of tabs closed by any means since install
   totalTabsRemoved: number,
@@ -77,7 +77,7 @@ export default function localStorage(state: State = initialState, action: Action
       // * Annotate `nextSavedTabs` to appease Flow. It's unclear why this annotation is required
       //   and can't be inferred.
       // * Remove any tabs that are not in the action's array of tabs.
-      const nextSavedTabs: Array<chrome$Tab> = state.savedTabs.filter(
+      const nextSavedTabs: Array<browser$Tab> = state.savedTabs.filter(
         (tab) => !removedTabsSet.has(tab)
       );
       return {

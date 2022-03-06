@@ -3,6 +3,7 @@
 import "./NavBar.css";
 import * as React from "react";
 import PauseButton from "./PauseButton";
+import { browser } from "webextension-polyfill";
 import cx from "classnames";
 
 export type NavBarTabID = "about" | "corral" | "lock" | "options";
@@ -45,7 +46,7 @@ export default function NavBar(props: Props): React.Node {
             href="#corral"
             onClick={handleClickCorralTab}
           >
-            {chrome.i18n.getMessage("tabCorral_name")}
+            {browser.i18n.getMessage("tabCorral_name")}
           </a>
         </li>
         <li className="nav-item">
@@ -54,7 +55,7 @@ export default function NavBar(props: Props): React.Node {
             href="#lock"
             onClick={handleClickLockTab}
           >
-            {chrome.i18n.getMessage("tabLock_name")}
+            {browser.i18n.getMessage("tabLock_name")}
           </a>
         </li>
         <li className="nav-item">
@@ -63,7 +64,7 @@ export default function NavBar(props: Props): React.Node {
             href="#options"
             onClick={handleClickOptionsTab}
           >
-            {chrome.i18n.getMessage("options_name")}
+            {browser.i18n.getMessage("options_name")}
           </a>
         </li>
         <li className="nav-item">
@@ -72,7 +73,7 @@ export default function NavBar(props: Props): React.Node {
             href="#about"
             onClick={handleClickAboutTab}
           >
-            {chrome.i18n.getMessage("about_name")}
+            {browser.i18n.getMessage("about_name")}
           </a>
         </li>
       </ul>

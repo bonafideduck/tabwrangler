@@ -5,6 +5,7 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import type { Dispatch, ThemeSettingValue } from "./Types";
 import FileSaver from "file-saver";
 import TabWrangleOption from "./TabWrangleOption";
+import { browser } from "webextension-polyfill";
 import { connect } from "react-redux";
 import cx from "classnames";
 import debounce from "lodash.debounce";
@@ -13,7 +14,7 @@ import { setCommands } from "./actions/tempStorageActions";
 import { setTheme } from "./actions/settingsActions";
 
 // Unpack TW.
-const { settings, store, tabmanager } = chrome.extension.getBackgroundPage().TW;
+const { settings, store, tabmanager } = browser.extension.getBackgroundPage().TW;
 
 function isValidPattern(pattern) {
   // some other choices such as '/' also do not make sense; not sure if they should be blocked as
@@ -22,7 +23,7 @@ function isValidPattern(pattern) {
 }
 
 type OptionsTabProps = {
-  commands: ?Array<chrome$Command>,
+  commands: ?Array<browser$Command>,
   dispatch: Dispatch,
   theme: ThemeSettingValue,
 };
@@ -59,7 +60,7 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
   componentDidMount() {
     // Fetch commands only when opening the `OptionsTab` since this is the only place they're
     // needed.
-    chrome.commands.getAll((commands) => {
+    browser.commands.getAll((commands) => {
       store.dispatch(this.props.dispatch(setCommands(commands)));
     });
 
@@ -73,7 +74,7 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
     };
 
     // this is for determining if we should show the filter tab groups setting
-    chrome.tabs.query({}, (tabs) => {
+    browser.tabs.query({}).then((tabs) => {
       // this shouldn't happen but we'll just bail if there are zero tabs
       if (tabs.length < 1) {
         return;
@@ -122,7 +123,7 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
   _handleConfigureCommandsClick = (event: SyntheticMouseEvent<HTMLAnchorElement>) => {
     // `chrome://` URLs are not linkable, but it's possible to create new tabs pointing to Chrome's
     // configuration pages. Calling `tabs.create` will open the tab and close this popup.
-    chrome.tabs.create({ url: event.currentTarget.href });
+    browser.tabs.create({ url: event.currentTarget.href });
 
     // Because `chrome://` URLs are not linkable, attempting to follow a link to them results in an
     // error like, "Not allowed to load local resource: chrome://extensions/configureCommands".
@@ -195,7 +196,7 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
 
   exportData = (event: SyntheticMouseEvent<HTMLButtonElement>) => {
     this.importExportDataWithFeedback(
-      chrome.i18n.getMessage("options_importExport_exporting") || "",
+      browser.i18n.getMessage("options_importExport_exporting") || "",
       tabmanager.exportData,
       event,
       (blob) => {
@@ -206,7 +207,7 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
 
   importData = (event: SyntheticInputEvent<HTMLInputElement>) => {
     this.importExportDataWithFeedback(
-      chrome.i18n.getMessage("options_importExport_importing") || "",
+      browser.i18n.getMessage("options_importExport_importing") || "",
       tabmanager.importData,
       event
     );
@@ -223,7 +224,7 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
           <CSSTransition classNames="alert" key="alert" timeout={400}>
             <div className="alert-sticky" key="alert">
               <div className="alert alert-success float-right">
-                {chrome.i18n.getMessage("options_saving")}
+                {browser.i18n.getMessage("options_saving")}
               </div>
             </div>
           </CSSTransition>,
@@ -266,12 +267,12 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
 
     return (
       <div className="tab-pane active">
-        <h4>{chrome.i18n.getMessage("options_section_settings")}</h4>
+        <h4>{browser.i18n.getMessage("options_section_settings")}</h4>
         <form>
           <div className="mb-2">
             <div>
               <label htmlFor="theme">
-                <strong>{chrome.i18n.getMessage("options_option_theme_label")}</strong>
+                <strong>{browser.i18n.getMessage("options_option_theme_label")}</strong>
               </label>
             </div>
             <div className="mb-2">
@@ -283,7 +284,7 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
                   }}
                   type="button"
                 >
-                  {chrome.i18n.getMessage("options_option_theme_system")}
+                  {browser.i18n.getMessage("options_option_theme_system")}
                 </button>
                 <button
                   className={cx("btn btn-outline-dark", { active: this.props.theme === "light" })}
@@ -296,7 +297,7 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
                     className="fas fa-sun mr-1"
                     style={{ fontSize: "11px", position: "relative", top: "-1px" }}
                   />
-                  {chrome.i18n.getMessage("options_option_theme_light")}
+                  {browser.i18n.getMessage("options_option_theme_light")}
                 </button>
                 <button
                   className={cx("btn btn-outline-dark", { active: this.props.theme === "dark" })}
@@ -309,13 +310,13 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
                     className="fas fa-moon mr-1"
                     style={{ fontSize: "11px", position: "relative", top: "-1px" }}
                   />
-                  {chrome.i18n.getMessage("options_option_theme_dark")}
+                  {browser.i18n.getMessage("options_option_theme_dark")}
                 </button>
               </div>
             </div>
             <div>
               <label className="mr-1" htmlFor="minutesInactive">
-                <strong>{chrome.i18n.getMessage("options_option_timeInactive_label")}</strong>
+                <strong>{browser.i18n.getMessage("options_option_timeInactive_label")}</strong>
               </label>
             </div>
             <div className="form-inline">
@@ -327,7 +328,7 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
                 min="0"
                 name="minutesInactive"
                 onChange={this._debouncedHandleSettingsChange}
-                title={chrome.i18n.getMessage("options_option_timeInactive_minutes")}
+                title={browser.i18n.getMessage("options_option_timeInactive_minutes")}
                 type="number"
               />
               <span className="mx-1"> : </span>
@@ -339,18 +340,18 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
                 min="0"
                 name="secondsInactive"
                 onChange={this._debouncedHandleSettingsChange}
-                title={chrome.i18n.getMessage("options_option_timeInactive_seconds")}
+                title={browser.i18n.getMessage("options_option_timeInactive_seconds")}
                 type="number"
               />
               <span className="form-control-static ml-1">
-                {chrome.i18n.getMessage("options_option_timeInactive_postLabel")}
+                {browser.i18n.getMessage("options_option_timeInactive_postLabel")}
               </span>
             </div>
           </div>
           <div className="mb-2">
             <div>
               <label htmlFor="minTabs">
-                <strong>{chrome.i18n.getMessage("options_option_minTabs_label")}</strong>
+                <strong>{browser.i18n.getMessage("options_option_minTabs_label")}</strong>
               </label>
             </div>
             <div className="form-inline">
@@ -361,18 +362,18 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
                 min="0"
                 name="minTabs"
                 onChange={this._debouncedHandleSettingsChange}
-                title={chrome.i18n.getMessage("options_option_minTabs_tabs")}
+                title={browser.i18n.getMessage("options_option_minTabs_tabs")}
                 type="number"
               />
               <span className="form-control-static">
-                {chrome.i18n.getMessage("options_option_minTabs_postLabel")}
+                {browser.i18n.getMessage("options_option_minTabs_postLabel")}
               </span>
             </div>
           </div>
           <div className="mb-2">
             <div>
               <label htmlFor="maxTabs">
-                <strong>{chrome.i18n.getMessage("options_option_rememberTabs_label")}</strong>
+                <strong>{browser.i18n.getMessage("options_option_rememberTabs_label")}</strong>
               </label>
             </div>
             <div className="form-inline">
@@ -383,11 +384,11 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
                 min="0"
                 name="maxTabs"
                 onChange={this._debouncedHandleSettingsChange}
-                title={chrome.i18n.getMessage("options_option_rememberTabs_tabs")}
+                title={browser.i18n.getMessage("options_option_rememberTabs_tabs")}
                 type="number"
               />
               <span className="form-control-static">
-                {chrome.i18n.getMessage("options_option_rememberTabs_postLabel")}
+                {browser.i18n.getMessage("options_option_rememberTabs_postLabel")}
               </span>
             </div>
           </div>
@@ -401,7 +402,7 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
               type="checkbox"
             />
             <label className="form-check-label" htmlFor="purgeClosedTabs">
-              {chrome.i18n.getMessage("options_option_clearOnQuit_label")}
+              {browser.i18n.getMessage("options_option_clearOnQuit_label")}
             </label>
           </div>
           <div className="form-check mb-1">
@@ -414,7 +415,7 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
               type="checkbox"
             />
             <label className="form-check-label" htmlFor="showBadgeCount">
-              {chrome.i18n.getMessage("options_option_showBadgeCount_label")}
+              {browser.i18n.getMessage("options_option_showBadgeCount_label")}
             </label>
           </div>
           <div className="form-check mb-1">
@@ -427,7 +428,7 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
               type="checkbox"
             />
             <label className="form-check-label" htmlFor="debounceOnActivated">
-              {chrome.i18n.getMessage("options_option_debounceOnActivated_label")}
+              {browser.i18n.getMessage("options_option_debounceOnActivated_label")}
             </label>
           </div>
           <div className="form-check mb-2">
@@ -440,7 +441,7 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
               type="checkbox"
             />
             <label className="form-check-label" htmlFor="filterAudio">
-              {chrome.i18n.getMessage("options_option_filterAudio_label")}
+              {browser.i18n.getMessage("options_option_filterAudio_label")}
             </label>
           </div>
           {this.state.showFilterTabGroupsOption && (
@@ -454,7 +455,7 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
                 type="checkbox"
               />
               <label className="form-check-label" htmlFor="filterGroupedTabs">
-                {chrome.i18n.getMessage("options_option_filterGroupedTabs_label")}
+                {browser.i18n.getMessage("options_option_filterGroupedTabs_label")}
               </label>
             </div>
           )}
@@ -464,12 +465,12 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
           />
         </form>
 
-        <h4 className="mt-3">{chrome.i18n.getMessage("options_section_autoLock")}</h4>
+        <h4 className="mt-3">{browser.i18n.getMessage("options_section_autoLock")}</h4>
         <div className="row">
           <div className="col-8">
             <form onSubmit={this.handleAddPatternSubmit} style={{ marginBottom: "20px" }}>
               <label htmlFor="wl-add">
-                {chrome.i18n.getMessage("options_option_autoLock_label")}
+                {browser.i18n.getMessage("options_option_autoLock_label")}
               </label>
               <div className="input-group">
                 <input
@@ -486,12 +487,12 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
                     id="addToWL"
                     type="submit"
                   >
-                    {chrome.i18n.getMessage("options_option_autoLock_add")}
+                    {browser.i18n.getMessage("options_option_autoLock_add")}
                   </button>
                 </span>
               </div>
               <p className="form-text text-muted">
-                {chrome.i18n.getMessage("options_option_autoLock_example")}
+                {browser.i18n.getMessage("options_option_autoLock_example")}
               </p>
             </form>
           </div>
@@ -500,7 +501,7 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
           <thead>
             <tr>
               <th style={{ width: "100%" }}>
-                {chrome.i18n.getMessage("options_option_autoLock_urlHeader")}
+                {browser.i18n.getMessage("options_option_autoLock_urlHeader")}
               </th>
               <th />
             </tr>
@@ -509,7 +510,7 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
             {whitelist.length === 0 ? (
               <tr>
                 <td className="text-center" colSpan="2">
-                  {chrome.i18n.getMessage("options_option_autoLock_empty")}
+                  {browser.i18n.getMessage("options_option_autoLock_empty")}
                 </td>
               </tr>
             ) : (
@@ -524,7 +525,7 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
                       onClick={this.handleClickRemovePattern.bind(this, pattern)}
                       style={{ marginBottom: "-4px", marginTop: "-4px" }}
                     >
-                      {chrome.i18n.getMessage("options_option_autoLock_remove")}
+                      {browser.i18n.getMessage("options_option_autoLock_remove")}
                     </button>
                   </td>
                 </tr>
@@ -533,12 +534,12 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
           </tbody>
         </table>
 
-        <h4 className="mt-3">{chrome.i18n.getMessage("options_section_importExport")}</h4>
+        <h4 className="mt-3">{browser.i18n.getMessage("options_section_importExport")}</h4>
         <div className="row">
           <div className="col-8 mb-1">
             <button className="btn btn-outline-dark btn-sm" onClick={this.exportData}>
               <i className="fas fa-file-export mr-1" />
-              {chrome.i18n.getMessage("options_importExport_export")}
+              {browser.i18n.getMessage("options_importExport_export")}
             </button>{" "}
             <button
               className="btn btn-outline-dark btn-sm"
@@ -547,7 +548,7 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
               }}
             >
               <i className="fas fa-file-import mr-1" />
-              {chrome.i18n.getMessage("options_importExport_import")}
+              {browser.i18n.getMessage("options_importExport_import")}
             </button>
             <input
               accept=".json"
@@ -561,10 +562,10 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
           </div>
           <div className="col-8">
             <p className="form-text text-muted">
-              {chrome.i18n.getMessage("options_importExport_description")}
+              {browser.i18n.getMessage("options_importExport_description")}
             </p>
             <p className="alert alert-warning">
-              {chrome.i18n.getMessage("options_importExport_importWarning")}
+              {browser.i18n.getMessage("options_importExport_importWarning")}
             </p>
           </div>
         </div>
@@ -574,7 +575,9 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
           importExportAlert
         )}
 
-        <h4 className="mt-3 mb-0">{chrome.i18n.getMessage("options_section_keyboardShortcuts")}</h4>
+        <h4 className="mt-3 mb-0">
+          {browser.i18n.getMessage("options_section_keyboardShortcuts")}
+        </h4>
         <p>
           <a
             href="chrome://extensions/configureCommands"
@@ -582,7 +585,7 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
             rel="noopener noreferrer"
             target="_blank"
           >
-            {chrome.i18n.getMessage("options_keyboardShortcuts_configure")}
+            {browser.i18n.getMessage("options_keyboardShortcuts_configure")}
           </a>
         </p>
         <ul>
@@ -592,12 +595,12 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
                 // This is a default command for any extension with a browser action. It can't be
                 // listened for.
                 //
-                // See https://developer.chrome.com/extensions/commands#usage
+                // See https://developer.browser.com/extensions/commands#usage
                 if (command.name === "_execute_browser_action") return null;
                 return (
                   <li key={command.shortcut}>
                     {command.shortcut == null || command.shortcut.length === 0 ? (
-                      <em>{chrome.i18n.getMessage("options_keyboardShortcuts_notSet")}</em>
+                      <em>{browser.i18n.getMessage("options_keyboardShortcuts_notSet")}</em>
                     ) : (
                       <kbd>{command.shortcut}</kbd>
                     )}

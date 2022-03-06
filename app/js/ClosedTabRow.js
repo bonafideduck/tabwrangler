@@ -4,21 +4,22 @@ import "./CoralTabRow.css";
 import * as React from "react";
 import LazyImage from "./LazyImage";
 import TimeAgo from "timeago-react";
+// import { browser } from "webextension-polyfill";
 import cx from "classnames";
 import extractHostname from "./extractHostname";
 import { register } from "timeago.js";
 import timeagoLocale from "./timeagoLocale";
 
-const uiLanguage = chrome.i18n.getUILanguage();
+const uiLanguage = browser.i18n.getUILanguage();
 register(uiLanguage, timeagoLocale[uiLanguage]);
 
 type Props = {
   isSelected: boolean,
-  onOpenTab: (tab: chrome$Tab, session: ?chrome$Session) => void,
-  onRemoveTab: (tab: chrome$Tab) => void,
-  onToggleTab: (tab: chrome$Tab, selected: boolean, multiselect: boolean) => void,
-  session: ?chrome$Session,
-  tab: chrome$Tab,
+  onOpenTab: (tab: browser$Tab, session: ?browser$Session) => void,
+  onRemoveTab: (tab: browser$Tab) => void,
+  onToggleTab: (tab: browser$Tab, selected: boolean, multiselect: boolean) => void,
+  session: ?browser$Session,
+  tab: browser$Tab,
   style: Object,
 };
 
@@ -111,16 +112,16 @@ export default function ClosedTabRow(props: Props): React.Node {
         className="ReactVirtualized__Table__rowColumn text-right"
         style={{ verticalAlign: "middle" }}
         title={
-          /* $FlowFixMe: `closedAt` is an expando property added by Tab Wrangler to chrome$Tab */
+          /* $FlowFixMe: `closedAt` is an expando property added by Tab Wrangler to browser$Tab */
           new Date(tab.closedAt).toLocaleString()
         }
       >
-        {/* $FlowFixMe: `closedAt` is an expando property added by Tab Wrangler to chrome$Tab */}
+        {/* $FlowFixMe: `closedAt` is an expando property added by Tab Wrangler to browser$Tab */}
         <TimeAgo datetime={tab.closedAt} locale={uiLanguage} />
       </div>
       <div className="ReactVirtualized__Table__rowColumn" style={{ width: "11px" }}>
         {session == null ? null : (
-          <abbr title={chrome.i18n.getMessage("corral_tabSessionFresh")}>
+          <abbr title={browser.i18n.getMessage("corral_tabSessionFresh")}>
             <i className="fas fa-leaf text-success" />
           </abbr>
         )}

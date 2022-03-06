@@ -1,6 +1,7 @@
 /* @flow */
 
 import * as React from "react";
+//import { browser } from "webextension-polyfill";
 
 interface Props {
   onChange: (event: SyntheticInputEvent<HTMLInputElement>) => void;
@@ -9,23 +10,23 @@ interface Props {
 
 export default function TabWrangleOption(props: Props): React.Node {
   // Declare this dynamically so it is available inside tests. It's not simple to modify globals,
-  // like `chrome`, using Jest. Is there a better way to do this? Probably.
+  // like `browser`, using Jest. Is there a better way to do this? Probably.
   const OPTIONS = [
-    { name: "withDupes", text: chrome.i18n.getMessage("options_dedupe_option_withDupes") },
+    { name: "withDupes", text: browser.i18n.getMessage("options_dedupe_option_withDupes") },
     {
       name: "exactURLMatch",
-      text: chrome.i18n.getMessage("options_dedupe_option_exactURLMatch"),
+      text: browser.i18n.getMessage("options_dedupe_option_exactURLMatch"),
     },
     {
       name: "hostnameAndTitleMatch",
-      text: chrome.i18n.getMessage("options_dedupe_option_hostnameAndTitleMatch"),
+      text: browser.i18n.getMessage("options_dedupe_option_hostnameAndTitleMatch"),
     },
   ];
 
   return (
     <>
       <label htmlFor="wrangleOption">
-        <strong>{chrome.i18n.getMessage("options_dedupe_label")}</strong>
+        <strong>{browser.i18n.getMessage("options_dedupe_label")}</strong>
       </label>
       {OPTIONS.map((option) => (
         <div className="form-check" key={option.name}>
@@ -46,17 +47,17 @@ export default function TabWrangleOption(props: Props): React.Node {
       <div className="row">
         <div className="col-8 form-text text-muted" style={{ marginBottom: 0 }}>
           <dl style={{ marginBottom: 0 }}>
-            <dt>{chrome.i18n.getMessage("options_dedupe_option_withDupes_label")}</dt>
-            <dd>{chrome.i18n.getMessage("options_dedupe_option_withDupes_description")}</dd>
+            <dt>{browser.i18n.getMessage("options_dedupe_option_withDupes_label")}</dt>
+            <dd>{browser.i18n.getMessage("options_dedupe_option_withDupes_description")}</dd>
             <dt style={{ marginTop: "10px" }}>
-              {chrome.i18n.getMessage("options_dedupe_option_exactURLMatch_label")}
+              {browser.i18n.getMessage("options_dedupe_option_exactURLMatch_label")}
             </dt>
-            <dd>{chrome.i18n.getMessage("options_dedupe_option_exactURLMatch_description")}</dd>
+            <dd>{browser.i18n.getMessage("options_dedupe_option_exactURLMatch_description")}</dd>
             <dt style={{ marginTop: "10px" }}>
-              {chrome.i18n.getMessage("options_dedupe_option_hostnameAndTitleMatch_label")}
+              {browser.i18n.getMessage("options_dedupe_option_hostnameAndTitleMatch_label")}
             </dt>
             <dd>
-              {chrome.i18n.getMessage("options_dedupe_option_hostnameAndTitleMatch_description")}
+              {browser.i18n.getMessage("options_dedupe_option_hostnameAndTitleMatch_description")}
             </dd>
           </dl>
         </div>

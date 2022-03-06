@@ -1,6 +1,7 @@
 /* @flow */
 /* global TW */
 
+import browser from "webextension-polyfill";
 import { exportData, importData } from "./actions/importExportActions";
 import {
   removeAllSavedTabs,
@@ -53,15 +54,15 @@ const TabManager = {
       });
     },
 
-    unwrangleTabs(sessionTabs: Array<{ session: ?chrome$Session, tab: chrome$Tab }>) {
+    unwrangleTabs(sessionTabs: Array<{ session: ?browser$Session, tab: browser$Tab }>) {
       const { localStorage } = TW.store.getState();
       const installDate = localStorage.installDate;
       let countableTabsUnwrangled = 0;
       sessionTabs.forEach((sessionTab) => {
         if (sessionTab.session == null || sessionTab.session.tab == null) {
-          chrome.tabs.create({ active: false, url: sessionTab.tab.url });
+          browser.tabs.create({ active: false, url: sessionTab.tab.url });
         } else {
-          chrome.sessions.restore(sessionTab.session.tab.sessionId);
+          browser.sessions.restore(sessionTab.session.tab.sessionId);
         }
 
         // Count only those tabs closed after install date because users who upgrade will not have
@@ -78,13 +79,13 @@ const TabManager = {
       TW.store.dispatch(setTotalTabsUnwrangled(totalTabsUnwrangled + countableTabsUnwrangled));
     },
 
-    getURLPositionFilterByWrangleOption(option: WrangleOption): (tab: chrome$Tab) => number {
+    getURLPositionFilterByWrangleOption(option: WrangleOption): (tab: browser$Tab) => number {
       if (option === "hostnameAndTitleMatch") {
-        return (tab: chrome$Tab): number => {
+        return (tab: browser$Tab): number => {
           return TabManager.closedTabs.findPositionByHostnameAndTitle(tab.url, tab.title);
         };
       } else if (option === "exactURLMatch") {
-        return (tab: chrome$Tab): number => {
+        return (tab: browser$Tab): number => {
           return TabManager.closedTabs.findPositionByURL(tab.url);
         };
       }
@@ -120,8 +121,8 @@ const TabManager = {
         nextSavedTabs.unshift(tabs[i]);
         totalTabsWrangled += 1;
 
-        // Close it in Chrome.
-        chrome.tabs.remove(tabs[i].id);
+        // Close it in browser.
+        browser.tabs.remove(tabs[i].id);
       }
 
       if (nextSavedTabs.length - maxTabs > 0) {
@@ -133,7 +134,7 @@ const TabManager = {
     },
   },
 
-  initTabs(tabs: Array<chrome$Tab>) {
+  initTabs(tabs: Array<browser$Tab>) {
     for (let i = 0; i < tabs.length; i++) {
       TabManager.updateLastAccessed(tabs[i]);
     }
@@ -227,10 +228,10 @@ const TabManager = {
     } else {
       text = "";
     }
-    chrome.browserAction.setBadgeText({ text });
+    browser.browserAction.setBadgeText({ text });
   },
 
-  updateLastAccessed(tabOrTabId: chrome$Tab | number | Array<chrome$Tab>) {
+  updateLastAccessed(tabOrTabId: browser$Tab | number | Array<browser$Tab>) {
     let tabId;
     if (Array.isArray(tabOrTabId)) {
       tabOrTabId.map(TabManager.updateLastAccessed.bind(this));

@@ -3,14 +3,9 @@ import ReactTestUtils from "react-dom/test-utils";
 import TabWrangleOption from "../TabWrangleOption";
 import renderer from "react-test-renderer";
 
-const chrome = {
-  i18n: {
-    getMessage: () => "",
-  },
-};
+global.chrome.i18n.getMessage = () => "";
 
 test("should render options with withDupes selected", () => {
-  global.chrome = chrome;
   const mockCallback = jest.fn();
 
   const two = renderer.create(

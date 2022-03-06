@@ -1,44 +1,36 @@
 import Settings from "../settings";
-
-let mockFunctionGet;
-let mockFunctionSet;
+import configureMockStore from "../__mocks__/configureMockStore";
 
 beforeEach(() => {
-  window.chrome = {
-    i18n: {
-      getMessage() {
-        return "";
-      },
-    },
-    storage: {
-      local: {},
-      sync: {},
-    },
+  const TW = (global.TW = {
+    settings: Settings,
+    store: configureMockStore(),
+  });
+
+  global.browser.extension.getBackgroundPage = () => {
+    return {
+      TW,
+    };
   };
-
-  mockFunctionGet = jest.fn();
-  mockFunctionSet = jest.fn();
-
-  window.chrome.storage.sync.get = mockFunctionGet;
-  window.chrome.storage.sync.set = mockFunctionSet;
 
   Settings.init();
 });
 
 afterEach(() => {
-  window.chrome = {};
+  global.browser.storage.sync.set.mock.calls.length = 0;
+  global.browser.storage.sync.get.mock.calls.length = 0;
 });
 
 test("should set maxTabs to 1000", () => {
   Settings.setmaxTabs(1000);
   expect(Settings.get("maxTabs")).toBe(1000);
-  expect(mockFunctionSet.mock.calls.length).toBe(1);
+  expect(global.browser.storage.sync.get.mock.calls.length).toBe(1);
 });
 
 test("should set maxTabs to 1", () => {
   Settings.setmaxTabs(1);
   expect(Settings.get("maxTabs")).toBe(1);
-  expect(mockFunctionSet.mock.calls.length).toBe(1);
+  expect(global.browser.storage.sync.set.mock.calls.length).toBe(1);
 });
 
 test("should throw an exception when maxTabs is < 1", () => {

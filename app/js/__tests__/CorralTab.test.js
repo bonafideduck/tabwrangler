@@ -1,24 +1,11 @@
 /* @flow */
 
 let sessionFuzzyMatchesTab;
+const getBackgroundPageSave = global.browser.extension.getBackgroundPage;
 
 beforeAll(() => {
-  window.chrome = {
-    extension: {
-      getBackgroundPage: () => {
-        return {
-          TW: { store: {} },
-        };
-      },
-    },
-    i18n: {
-      getMessage() {
-        return "";
-      },
-      getUILanguage() {
-        return "";
-      },
-    },
+  global.browser.extension.getBackgroundPage = () => {
+    return { TW: { store: {} } };
   };
 
   // Dynamic import so globals can be defined beforehand. Importing 'CorralTab.js' calls
@@ -27,7 +14,7 @@ beforeAll(() => {
 });
 
 afterAll(() => {
-  window.chrome = {};
+  global.browser.extension.getBackgroundPage = getBackgroundPageSave;
 });
 
 describe("sessionFuzzyMatchesTab", () => {

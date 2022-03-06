@@ -5,17 +5,18 @@ import * as React from "react";
 import { Table, WindowScroller } from "react-virtualized";
 import ClosedTabRow from "./ClosedTabRow";
 import type { Dispatch } from "./Types";
+import browser from "webextension-polyfill";
 import { connect } from "react-redux";
 import cx from "classnames";
 import extractHostname from "./extractHostname";
 import extractRootDomain from "./extractRootDomain";
 import { removeSavedTabs } from "./actions/localStorageActions";
-
 // Unpack TW.
-const { settings, tabmanager } = chrome.extension.getBackgroundPage().TW;
+
+const { settings, tabmanager } = browser.extension.getBackgroundPage().TW;
 
 function keywordFilter(keyword: string) {
-  return function (tab: chrome$Tab) {
+  return function (tab: browser$Tab) {
     const test = new RegExp(keyword, "i");
     return (tab.title != null && test.exec(tab.title)) || (tab.url != null && test.exec(tab.url));
   };
@@ -25,13 +26,13 @@ type Sorter = {
   key: string,
   label: string,
   shortLabel: string,
-  sort: (a: ?chrome$Tab, b: ?chrome$Tab) => number,
+  sort: (a: ?browser$Tab, b: ?browser$Tab) => number,
 };
 
 const AlphaSorter: Sorter = {
   key: "alpha",
-  label: chrome.i18n.getMessage("corral_sortPageTitle") || "",
-  shortLabel: chrome.i18n.getMessage("corral_sortPageTitle_short") || "",
+  label: browser.i18n.getMessage("corral_sortPageTitle") || "",
+  shortLabel: browser.i18n.getMessage("corral_sortPageTitle_short") || "",
   sort(tabA, tabB) {
     if (tabA == null || tabB == null || tabA.title == null || tabB.title == null) {
       return 0;
@@ -43,8 +44,8 @@ const AlphaSorter: Sorter = {
 
 const ReverseAlphaSorter: Sorter = {
   key: "reverseAlpha",
-  label: chrome.i18n.getMessage("corral_sortPageTitle_descending") || "",
-  shortLabel: chrome.i18n.getMessage("corral_sortPageTitle_descending_short") || "",
+  label: browser.i18n.getMessage("corral_sortPageTitle_descending") || "",
+  shortLabel: browser.i18n.getMessage("corral_sortPageTitle_descending_short") || "",
   sort(tabA, tabB) {
     return -1 * AlphaSorter.sort(tabA, tabB);
   },
@@ -52,13 +53,13 @@ const ReverseAlphaSorter: Sorter = {
 
 const ChronoSorter: Sorter = {
   key: "chrono",
-  label: chrome.i18n.getMessage("corral_sortTimeClosed") || "",
-  shortLabel: chrome.i18n.getMessage("corral_sortTimeClosed_short") || "",
+  label: browser.i18n.getMessage("corral_sortTimeClosed") || "",
+  shortLabel: browser.i18n.getMessage("corral_sortTimeClosed_short") || "",
   sort(tabA, tabB) {
     if (tabA == null || tabB == null) {
       return 0;
     } else {
-      // $FlowFixMe `closedAt` is an expando property on `chrome$Tab`
+      // $FlowFixMe `closedAt` is an expando property on `browser$Tab`
       return tabA.closedAt - tabB.closedAt;
     }
   },
@@ -66,8 +67,8 @@ const ChronoSorter: Sorter = {
 
 const ReverseChronoSorter: Sorter = {
   key: "reverseChrono",
-  label: chrome.i18n.getMessage("corral_sortTimeClosed_descending") || "",
-  shortLabel: chrome.i18n.getMessage("corral_sortTimeClosed_descending_short") || "",
+  label: browser.i18n.getMessage("corral_sortTimeClosed_descending") || "",
+  shortLabel: browser.i18n.getMessage("corral_sortTimeClosed_descending_short") || "",
   sort(tabA, tabB) {
     return -1 * ChronoSorter.sort(tabA, tabB);
   },
@@ -75,8 +76,8 @@ const ReverseChronoSorter: Sorter = {
 
 const DomainSorter: Sorter = {
   key: "domain",
-  label: chrome.i18n.getMessage("corral_sortDomain") || "",
-  shortLabel: chrome.i18n.getMessage("corral_sortDomain_short") || "",
+  label: browser.i18n.getMessage("corral_sortDomain") || "",
+  shortLabel: browser.i18n.getMessage("corral_sortDomain_short") || "",
   sort(tabA, tabB) {
     if (tabA == null || tabB == null || tabA.url == null || tabB.url == null) {
       return 0;
@@ -100,8 +101,8 @@ const DomainSorter: Sorter = {
 
 const ReverseDomainSorter: Sorter = {
   key: "reverseDomain",
-  label: chrome.i18n.getMessage("corral_sortDomain_descending") || "",
-  shortLabel: chrome.i18n.getMessage("corral_sortDomain_descending_short") || "",
+  label: browser.i18n.getMessage("corral_sortDomain_descending") || "",
+  shortLabel: browser.i18n.getMessage("corral_sortDomain_descending_short") || "",
   sort(tabA, tabB) {
     return -1 * DomainSorter.sort(tabA, tabB);
   },
@@ -117,7 +118,7 @@ const Sorters: Array<Sorter> = [
   ReverseChronoSorter,
 ];
 
-export function sessionFuzzyMatchesTab(session: chrome$Session, tab: chrome$Tab): boolean {
+export function sessionFuzzyMatchesTab(session: browser$Session, tab: browser$Tab): boolean {
   // Sessions' `lastModified` is only accurate to the second in Chrome whereas `closedAt` is
   // accurate to the millisecond. Convert to ms if needed.
   const lastModifiedMs =
@@ -155,8 +156,8 @@ function rowRenderer({ key, rowData, style }) {
 
 type Props = {
   dispatch: Dispatch,
-  savedTabs: Array<chrome$Tab>,
-  sessions: Array<chrome$Session>,
+  savedTabs: Array<browser$Tab>,
+  sessions: Array<browser$Session>,
   totalTabsRemoved: number,
   totalTabsWrangled: number,
 };
@@ -165,13 +166,13 @@ type State = {
   filter: string,
   isSortDropdownOpen: boolean,
   savedSortOrder: ?string,
-  selectedTabs: Set<chrome$Tab>,
+  selectedTabs: Set<browser$Tab>,
   sorter: Sorter,
 };
 
 class CorralTab extends React.Component<Props, State> {
   _dropdownRef: ?HTMLElement;
-  _lastSelectedTab: ?chrome$Tab;
+  _lastSelectedTab: ?browser$Tab;
   _searchRefFocusTimeout: TimeoutID;
   _searchRef: ?HTMLElement;
 
@@ -280,13 +281,13 @@ class CorralTab extends React.Component<Props, State> {
     this.setState({ selectedTabs: new Set() });
   };
 
-  _handleRemoveTab = (tab: chrome$Tab) => {
+  _handleRemoveTab = (tab: browser$Tab) => {
     this.props.dispatch(removeSavedTabs([tab]));
     this.state.selectedTabs.delete(tab);
     this.forceUpdate();
   };
 
-  _handleToggleTab = (tab: chrome$Tab, isSelected: boolean, multiselect: boolean) => {
+  _handleToggleTab = (tab: browser$Tab, isSelected: boolean, multiselect: boolean) => {
     // If this is a multiselect (done by holding the Shift key and clicking), see if the last
     // selected tab is still visible and, if it is, toggle all tabs between it and this new clicked
     // tab.
@@ -348,7 +349,7 @@ class CorralTab extends React.Component<Props, State> {
     }
   };
 
-  openTab = (tab: chrome$Tab, session: ?chrome$Session) => {
+  openTab = (tab: browser$Tab, session: ?browser$Session) => {
     tabmanager.closedTabs.unwrangleTabs([{ session, tab }]);
     this.state.selectedTabs.delete(tab);
     this.forceUpdate();
@@ -362,14 +363,14 @@ class CorralTab extends React.Component<Props, State> {
           style={{ flex: 1, padding: "8px" }}
         >
           {this.props.savedTabs.length === 0
-            ? chrome.i18n.getMessage("corral_emptyList")
-            : chrome.i18n.getMessage("corral_noTabsMatch")}
+            ? browser.i18n.getMessage("corral_emptyList")
+            : browser.i18n.getMessage("corral_noTabsMatch")}
         </div>
       </div>
     );
   };
 
-  _searchTabs(): Array<chrome$Tab> {
+  _searchTabs(): Array<browser$Tab> {
     return this.props.savedTabs.filter(keywordFilter(this.state.filter));
   }
 
@@ -414,7 +415,7 @@ class CorralTab extends React.Component<Props, State> {
                 className="form-control"
                 name="search"
                 onChange={this._handleSearchChange}
-                placeholder={chrome.i18n.getMessage("corral_searchTabs")}
+                placeholder={browser.i18n.getMessage("corral_searchTabs")}
                 ref={(_searchRef: ?HTMLElement) => {
                   this._searchRef = _searchRef;
                 }}
@@ -424,9 +425,9 @@ class CorralTab extends React.Component<Props, State> {
             </div>
           </form>
           <div className="col text-right" style={{ lineHeight: "30px" }}>
-            <span className="text-muted">{chrome.i18n.getMessage("corral_tabsWrangled")}</span>{" "}
-            {totalTabsWrangled} {chrome.i18n.getMessage("corral_tabsWrangled_or")}{" "}
-            <abbr title={chrome.i18n.getMessage("corral_tabsWrangled_formula")}>
+            <span className="text-muted">{browser.i18n.getMessage("corral_tabsWrangled")}</span>{" "}
+            {totalTabsWrangled} {browser.i18n.getMessage("corral_tabsWrangled_or")}{" "}
+            <abbr title={browser.i18n.getMessage("corral_tabsWrangled_formula")}>
               {percentClosed}%
             </abbr>
           </div>
@@ -440,8 +441,8 @@ class CorralTab extends React.Component<Props, State> {
               onClick={this._toggleAllTabs}
               title={
                 areAllClosedTabsSelected
-                  ? chrome.i18n.getMessage("corral_toggleAllTabs_deselectAll")
-                  : chrome.i18n.getMessage("corral_toggleAllTabs_selectAll")
+                  ? browser.i18n.getMessage("corral_toggleAllTabs_deselectAll")
+                  : browser.i18n.getMessage("corral_toggleAllTabs_selectAll")
               }
             >
               <input
@@ -456,22 +457,22 @@ class CorralTab extends React.Component<Props, State> {
                 <button
                   className="btn btn-outline-dark btn-sm ml-1 px-3"
                   onClick={this._handleRemoveSelectedTabs}
-                  title={chrome.i18n.getMessage("corral_removeSelectedTabs")}
+                  title={browser.i18n.getMessage("corral_removeSelectedTabs")}
                   type="button"
                 >
                   <span className="sr-only">
-                    {chrome.i18n.getMessage("corral_removeSelectedTabs")}
+                    {browser.i18n.getMessage("corral_removeSelectedTabs")}
                   </span>
                   <i className="fas fa-trash-alt" />
                 </button>
                 <button
                   className="btn btn-outline-dark btn-sm ml-1 px-3"
                   onClick={this._handleRestoreSelectedTabs}
-                  title={chrome.i18n.getMessage("corral_restoreSelectedTabs")}
+                  title={browser.i18n.getMessage("corral_restoreSelectedTabs")}
                   type="button"
                 >
                   <span className="sr-only">
-                    {chrome.i18n.getMessage("corral_removeSelectedTabs")}
+                    {browser.i18n.getMessage("corral_removeSelectedTabs")}
                   </span>
                   <i className="fas fa-external-link-alt" />
                 </button>
@@ -483,12 +484,12 @@ class CorralTab extends React.Component<Props, State> {
               <span
                 className={"badge badge-pill badge-primary d-flex align-items-center px-2 mr-1"}
               >
-                {chrome.i18n.getMessage("corral_searchResults_label", `${closedTabs.length}`)}
+                {browser.i18n.getMessage("corral_searchResults_label", `${closedTabs.length}`)}
                 <button
                   className="close close-xs ml-1"
                   onClick={this._clearFilter}
                   style={{ marginTop: "-2px" }}
-                  title={chrome.i18n.getMessage("corral_searchResults_clear")}
+                  title={browser.i18n.getMessage("corral_searchResults_clear")}
                 >
                   &times;
                 </button>
@@ -505,9 +506,9 @@ class CorralTab extends React.Component<Props, State> {
                 className="btn btn-outline-dark btn-sm"
                 id="sort-dropdown"
                 onClick={this._toggleSortDropdown}
-                title={chrome.i18n.getMessage("corral_currentSort", this.state.sorter.label)}
+                title={browser.i18n.getMessage("corral_currentSort", this.state.sorter.label)}
               >
-                <span>{chrome.i18n.getMessage("corral_sortBy")}</span>
+                <span>{browser.i18n.getMessage("corral_sortBy")}</span>
                 <span> {this.state.sorter.shortLabel}</span> <i className="fas fa-caret-down" />
               </button>
               <div
@@ -538,7 +539,7 @@ class CorralTab extends React.Component<Props, State> {
                         type="checkbox"
                       />
                       <label className="form-check-label" htmlFor="corral-tab--save-sort-order">
-                        {chrome.i18n.getMessage("options_option_saveSortOrder")}
+                        {browser.i18n.getMessage("options_option_saveSortOrder")}
                       </label>
                     </div>
                   </div>
@@ -563,7 +564,7 @@ class CorralTab extends React.Component<Props, State> {
                 const tab = closedTabs[index];
 
                 // The Chrome extension API claims [`getRecentlyClosed`][0] always returns an
-                // Array<chrome$Session>, but in at least one case a user is getting an exception
+                // Array<browser$Session>, but in at least one case a user is getting an exception
                 // where `this.props.sessions` is null. Because it's safe to continue without
                 // Sessions, do a null check and continue on unless a more thorough solution is
                 // eventually found.

@@ -3,6 +3,7 @@
 import * as React from "react";
 import type { AppState, Dispatch } from "./Types";
 import NavBar, { type NavBarTabID } from "./NavBar";
+import { browser } from "webextension-polyfill";
 import { clearTempStorage, fetchSessions } from "./actions/tempStorageActions";
 import { useDispatch, useSelector } from "react-redux";
 import AboutTab from "./AboutTab";
@@ -29,11 +30,11 @@ export default function Popup(): React.Node {
       dispatch(fetchSessions());
     }
 
-    chrome.sessions.onChanged.addListener(updateSessionsRecentlyClosed);
+    browser.sessions.onChanged.addListener(updateSessionsRecentlyClosed);
     updateSessionsRecentlyClosed();
 
     return () => {
-      chrome.sessions.onChanged.removeListener(updateSessionsRecentlyClosed);
+      browser.sessions.onChanged.removeListener(updateSessionsRecentlyClosed);
     };
   }, [dispatch]);
 

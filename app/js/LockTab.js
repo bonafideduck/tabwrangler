@@ -3,23 +3,24 @@
 import * as React from "react";
 import { isLocked, isManuallyLockable } from "./tab";
 import OpenTabRow from "./OpenTabRow";
+import { browser } from "webextension-polyfill";
 import cx from "classnames";
 import memoize from "memoize-one";
 
 // Unpack TW.
-const { settings, tabmanager } = chrome.extension.getBackgroundPage().TW;
+const { settings, tabmanager } = browser.extension.getBackgroundPage().TW;
 
 type Sorter = {
   key: string,
   label: string,
   shortLabel: string,
-  sort: (a: ?chrome$Tab, b: ?chrome$Tab) => number,
+  sort: (a: ?browser$Tab, b: ?browser$Tab) => number,
 };
 
 const ChronoSorter: Sorter = {
   key: "chrono",
-  label: chrome.i18n.getMessage("tabLock_sort_timeUntilClose") || "",
-  shortLabel: chrome.i18n.getMessage("tabLock_sort_timeUntilClose_short") || "",
+  label: browser.i18n.getMessage("tabLock_sort_timeUntilClose") || "",
+  shortLabel: browser.i18n.getMessage("tabLock_sort_timeUntilClose_short") || "",
   sort(tabA, tabB) {
     if (tabA == null || tabB == null) {
       return 0;
@@ -37,8 +38,8 @@ const ChronoSorter: Sorter = {
 
 const ReverseChronoSorter: Sorter = {
   key: "reverseChrono",
-  label: chrome.i18n.getMessage("tabLock_sort_timeUntilClose_desc") || "",
-  shortLabel: chrome.i18n.getMessage("tabLock_sort_timeUntilClose_desc_short") || "",
+  label: browser.i18n.getMessage("tabLock_sort_timeUntilClose_desc") || "",
+  shortLabel: browser.i18n.getMessage("tabLock_sort_timeUntilClose_desc_short") || "",
   sort(tabA, tabB) {
     return -1 * ChronoSorter.sort(tabA, tabB);
   },
@@ -46,8 +47,8 @@ const ReverseChronoSorter: Sorter = {
 
 const TabOrderSorter: Sorter = {
   key: "tabOrder",
-  label: chrome.i18n.getMessage("tabLock_sort_tabOrder") || "",
-  shortLabel: chrome.i18n.getMessage("tabLock_sort_tabOrder_short") || "",
+  label: browser.i18n.getMessage("tabLock_sort_tabOrder") || "",
+  shortLabel: browser.i18n.getMessage("tabLock_sort_tabOrder_short") || "",
   sort(tabA, tabB) {
     if (tabA == null || tabB == null) {
       return 0;
@@ -61,8 +62,8 @@ const TabOrderSorter: Sorter = {
 
 const ReverseTabOrderSorter: Sorter = {
   key: "reverseTabOrder",
-  label: chrome.i18n.getMessage("tabLock_sort_tabOrder_desc") || "",
-  shortLabel: chrome.i18n.getMessage("tabLock_sort_tabOrder_desc_short") || "",
+  label: browser.i18n.getMessage("tabLock_sort_tabOrder_desc") || "",
+  shortLabel: browser.i18n.getMessage("tabLock_sort_tabOrder_desc_short") || "",
   sort(tabA, tabB) {
     return -1 * TabOrderSorter.sort(tabA, tabB);
   },
@@ -75,12 +76,12 @@ type State = {
   isSortDropdownOpen: boolean,
   savedSortOrder: ?string,
   sorter: Sorter,
-  tabs: Array<chrome$Tab>,
+  tabs: Array<browser$Tab>,
 };
 
 export default class LockTab extends React.PureComponent<{}, State> {
   _dropdownRef: ?HTMLElement;
-  _lastSelectedTab: ?chrome$Tab;
+  _lastSelectedTab: ?browser$Tab;
   _timeLeftInterval: ?number;
 
   constructor() {
@@ -107,7 +108,7 @@ export default class LockTab extends React.PureComponent<{}, State> {
 
     // TODO: THIS WILL BREAK. This is some async stuff inside a synchronous call. Fix this, move
     // the state into a higher component.
-    chrome.tabs.query({}, (tabs) => {
+    browser.tabs.query({}).then((tabs) => {
       this.setState({ tabs });
     });
 
@@ -155,8 +156,8 @@ export default class LockTab extends React.PureComponent<{}, State> {
     }
   };
 
-  _handleToggleTab: (tab: chrome$Tab, selected: boolean, multiselect: boolean) => void = (
-    tab: chrome$Tab,
+  _handleToggleTab: (tab: browser$Tab, selected: boolean, multiselect: boolean) => void = (
+    tab: browser$Tab,
     selected: boolean,
     multiselect: boolean
   ) => {
@@ -196,8 +197,8 @@ export default class LockTab extends React.PureComponent<{}, State> {
     }
   };
 
-  _getSortedTabs: (tabs: Array<chrome$Tab>, sorter: Sorter) => Array<chrome$Tab> = memoize(
-    (tabs: Array<chrome$Tab>, sorter: Sorter) => {
+  _getSortedTabs: (tabs: Array<browser$Tab>, sorter: Sorter) => Array<browser$Tab> = memoize(
+    (tabs: Array<browser$Tab>, sorter: Sorter) => {
       return (tabs.slice(): any).sort(sorter.sort);
     }
   );
@@ -211,7 +212,7 @@ export default class LockTab extends React.PureComponent<{}, State> {
       <div className="tab-pane active">
         <div className="d-flex align-items-center justify-content-between border-bottom pb-2">
           <div style={{ paddingLeft: "0.55rem", paddingRight: "0.55rem" }}>
-            <abbr title={chrome.i18n.getMessage("tabLock_lockLabel")}>
+            <abbr title={browser.i18n.getMessage("tabLock_lockLabel")}>
               <i className="fas fa-lock" />
             </abbr>
           </div>
@@ -226,9 +227,9 @@ export default class LockTab extends React.PureComponent<{}, State> {
               className="btn btn-outline-dark btn-sm"
               id="sort-dropdown"
               onClick={this._toggleSortDropdown}
-              title={chrome.i18n.getMessage("corral_currentSort", this.state.sorter.label)}
+              title={browser.i18n.getMessage("corral_currentSort", this.state.sorter.label)}
             >
-              <span>{chrome.i18n.getMessage("corral_sortBy")}</span>
+              <span>{browser.i18n.getMessage("corral_sortBy")}</span>
               <span> {this.state.sorter.shortLabel}</span> <i className="fas fa-caret-down" />
             </button>
             <div
@@ -259,7 +260,7 @@ export default class LockTab extends React.PureComponent<{}, State> {
                       type="checkbox"
                     />
                     <label className="form-check-label" htmlFor="lock-tab--save-sort-order">
-                      {chrome.i18n.getMessage("options_option_saveSortOrder")}
+                      {browser.i18n.getMessage("options_option_saveSortOrder")}
                     </label>
                   </div>
                 </div>

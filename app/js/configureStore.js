@@ -1,5 +1,6 @@
 /* @flow */
 
+import { browser } from "webextension-polyfill";
 import type { Action, AppState } from "./Types";
 import { type Store, applyMiddleware, combineReducers, createStore } from "redux";
 import { localStorage, syncStorage } from "redux-persist-webextension-storage";
@@ -24,7 +25,7 @@ const localStoragePersistConfig = {
     // case, return the full contents of storage to be the initial state.
     if (state == null) {
       return new Promise((resolve) => {
-        chrome.storage.local.get(PRE_V6_STORAGE_KEYS, (items) => {
+        browser.storage.local.get(PRE_V6_STORAGE_KEYS, (items) => {
           if (PRE_V6_STORAGE_KEYS.some((key) => key !== "installDate" && items[key] == null)) {
             // If there's nothing left in the store, then there's something unexpected going on with
             // react-redux and/or the Chrome/Firefox store. If any of the keys are null, then do
@@ -36,7 +37,7 @@ const localStoragePersistConfig = {
             resolve(state);
           } else {
             // Remove old data from the store once it's been migrated.
-            chrome.storage.local.remove(Object.keys(items));
+            mweBrowser.storage.local.remove(Object.keys(items));
             resolve(items);
           }
         });
@@ -64,7 +65,7 @@ const settingsPersistConfig = {
       // Migrating from v1 -> v2 moves `settings.paused` into the managed sync storage area.
       case 1:
         return new Promise((resolve) => {
-          chrome.storage.sync.get("paused", (items) => {
+          mwebrowser.storage.sync.get("paused", (items) => {
             if (Object.prototype.hasOwnProperty.call(items, "paused")) {
               console.log("migrating! found paused", items.paused);
               resolve({

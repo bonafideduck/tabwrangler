@@ -1,6 +1,7 @@
 /* @flow */
 
 import * as React from "react";
+import browser from "webextension-polyfill";
 
 export default function AboutTab(): React.Node {
   return (
@@ -11,9 +12,9 @@ export default function AboutTab(): React.Node {
           rel="noopener noreferrer"
           target="_blank"
         >
-          {chrome.i18n.getMessage("extName")}
+          {browser.i18n.getMessage("extName")}
         </a>{" "}
-        v{chrome.runtime.getManifest().version}
+        v{browser.runtime.getManifest().version}
       </p>
       <ul>
         <li>
@@ -22,7 +23,7 @@ export default function AboutTab(): React.Node {
             rel="noopener noreferrer"
             target="_blank"
           >
-            {chrome.i18n.getMessage("about_changeLog")}
+            {browser.i18n.getMessage("about_changeLog")}
           </a>
         </li>
         <li>
@@ -31,7 +32,7 @@ export default function AboutTab(): React.Node {
             rel="noopener noreferrer"
             target="_blank"
           >
-            {chrome.i18n.getMessage("about_support")}
+            {browser.i18n.getMessage("about_support")}
           </a>
         </li>
         <li>
@@ -40,7 +41,7 @@ export default function AboutTab(): React.Node {
             rel="noopener noreferrer"
             target="_blank"
           >
-            {chrome.i18n.getMessage("about_sourceCode")}
+            {browser.i18n.getMessage("about_sourceCode")}
           </a>
         </li>
       </ul>

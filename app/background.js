@@ -1,5 +1,6 @@
 /* @flow */
 
+import browser from "webextension-polyfill";
 import configureStore from "./js/configureStore";
 import debounce from "lodash.debounce";
 import menus from "./js/menus";
@@ -25,13 +26,13 @@ const checkToClose = function (cutOff: ?number) {
 
     if (!TW.store.getState().settings.paused) {
       // Update the selected one to make sure it doesn't get closed.
-      chrome.tabs.query({ active: true, lastFocusedWindow: true }, tabmanager.updateLastAccessed);
+      browser.tabs.query({ active: true, lastFocusedWindow: true }).then(tabmanager.updateLastAccessed);
 
       if (settings.get("filterAudio") === true) {
-        chrome.tabs.query({ audible: true }, tabmanager.updateLastAccessed);
+        browser.tabs.query({ audible: true }).then(tabmanager.updateLastAccessed);
       }
 
-      chrome.windows.getAll({ populate: true }, function (windows) {
+      browser.windows.getAll({ populate: true }).then(function (windows) {
         let tabs = []; // Array of tabs, populated for each window.
         windows.forEach((myWindow) => {
           tabs = myWindow.tabs;
@@ -109,16 +110,16 @@ function watchPaused(store) {
   store.subscribe(
     pausedWatch((paused) => {
       if (paused) {
-        chrome.browserAction.setIcon({ path: "img/icon-paused.png" });
+        broswer.browserAction.setIcon({ path: "img/icon-paused.png" });
       } else {
-        chrome.browserAction.setIcon({ path: "img/icon.png" });
+        browser.browserAction.setIcon({ path: "img/icon.png" });
 
         // The user has just unpaused, immediately set all tabs to the current time so they will not
         // be closed.
-        chrome.tabs.query(
+        browser.tabs.query(
           {
             windowType: "normal",
-          },
+          }).then(
           tabmanager.initTabs
         );
       }
@@ -170,11 +171,11 @@ const startup = function () {
     1000
   );
   // Move this to a function somehwere so we can restart the process.
-  chrome.tabs.query({ windowType: "normal" }, tabmanager.initTabs);
-  chrome.tabs.onCreated.addListener(onNewTab);
-  chrome.tabs.onRemoved.addListener(tabmanager.removeTab);
-  chrome.tabs.onReplaced.addListener(tabmanager.replaceTab);
-  chrome.tabs.onActivated.addListener(function (tabInfo) {
+  browser.tabs.query({ windowType: "normal" }).then(tabmanager.initTabs);
+  browser.tabs.onCreated.addListener(onNewTab);
+  browser.tabs.onRemoved.addListener(tabmanager.removeTab);
+  browser.tabs.onReplaced.addListener(tabmanager.replaceTab);
+  browser.tabs.onActivated.addListener(function (tabInfo) {
     menus.updateContextMenus(tabInfo["tabId"]);
 
     if (settings.get("debounceOnActivated")) {
@@ -188,10 +189,10 @@ const startup = function () {
   // Create the "lock tab" context menu:
   menus.createContextMenus();
 
-  chrome.commands.onCommand.addListener((command) => {
+  browser.commands.onCommand.addListener((command) => {
     switch (command) {
       case "wrangle-current-tab":
-        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
           tabmanager.closedTabs.wrangleTabs(tabs);
         });
         break;

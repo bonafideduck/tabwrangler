@@ -5,9 +5,7 @@ module.exports = async () => {
   return {
     verbose: true,
     testEnvironment: "jsdom",
-    globals: {
-      chrome: true,
-    },
+    setupFiles: ["./jest.setup.js"],
     moduleNameMapper: {
       "\\.(s?css)$": "<rootDir>/app/__mocks__/styleMock.js",
     },

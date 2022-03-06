@@ -3,11 +3,12 @@
 import * as React from "react";
 import { isLocked, isManuallyLockable } from "./tab";
 import LazyImage from "./LazyImage";
+import browser from "webextension-polyfill";
 import cx from "classnames";
 import { useSelector } from "react-redux";
 
 // Unpack TW.
-const { settings, tabmanager } = chrome.extension.getBackgroundPage().TW;
+const { settings, tabmanager } = browser.extension.getBackgroundPage().TW;
 
 function secondsToMinutes(seconds) {
   let s = seconds % 60;
@@ -16,8 +17,8 @@ function secondsToMinutes(seconds) {
 }
 
 type Props = {
-  onToggleTab: (tab: chrome$Tab, selected: boolean, multiselect: boolean) => void,
-  tab: chrome$Tab,
+  onToggleTab: (tab: browser$Tab, selected: boolean, multiselect: boolean) => void,
+  tab: browser$Tab,
 };
 
 export default function OpenTabRow(props: Props): React.Node {
@@ -37,20 +38,20 @@ export default function OpenTabRow(props: Props): React.Node {
   if (tabIsLocked) {
     let reason;
     if (tab.pinned) {
-      reason = chrome.i18n.getMessage("tabLock_lockedReason_pinned");
+      reason = browser.i18n.getMessage("tabLock_lockedReason_pinned");
     } else if (settings.get("filterAudio") && tab.audible) {
-      reason = <abbr title={chrome.i18n.getMessage("tabLock_lockedReason_audible")}>Locked</abbr>;
-      // $FlowFixMe missing groupId in chrome.tab
+      reason = <abbr title={browser.i18n.getMessage("tabLock_lockedReason_audible")}>Locked</abbr>;
+      // $FlowFixMe missing groupId in browser.tab
     } else if (settings.get("filterGroupedTabs") && "groupId" in tab && tab.groupId > 0) {
-      reason = chrome.i18n.getMessage("tabLock_lockedReason_group");
+      reason = browser.i18n.getMessage("tabLock_lockedReason_group");
     } else if (tabWhitelistMatch) {
       reason = (
-        <abbr title={chrome.i18n.getMessage("tabLock_lockedReason_matches", tabWhitelistMatch)}>
+        <abbr title={browser.i18n.getMessage("tabLock_lockedReason_matches", tabWhitelistMatch)}>
           Auto-Locked
         </abbr>
       );
     } else {
-      reason = chrome.i18n.getMessage("tabLock_lockedReason_locked");
+      reason = browser.i18n.getMessage("tabLock_lockedReason_locked");
     }
 
     lockStatusElement = (
@@ -61,7 +62,7 @@ export default function OpenTabRow(props: Props): React.Node {
   } else {
     let timeLeftContent;
     if (paused) {
-      timeLeftContent = chrome.i18n.getMessage("tabLock_lockedReason_paused");
+      timeLeftContent = browser.i18n.getMessage("tabLock_lockedReason_paused");
     } else {
       const lastModified = tabmanager.tabTimes[tab.id];
       const cutOff = new Date().getTime() - settings.get("stayOpen");

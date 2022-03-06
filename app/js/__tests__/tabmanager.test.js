@@ -10,6 +10,8 @@ type MockTab = {
   url?: string,
 };
 
+const getBackgroundPageSave = global.browser.extension.getBackgroundPage;
+
 function createTab(overrides: MockTab): chrome$Tab {
   return {
     active: false,
@@ -27,43 +29,34 @@ function createTab(overrides: MockTab): chrome$Tab {
 }
 
 beforeEach(() => {
-  const TW = (window.TW = {
+  const TW = (global.TW = {
     settings: {},
     store: configureMockStore(),
   });
 
-  window.chrome = {
-    storage: {
-      local: {},
-    },
-    tabs: {},
-    browserAction: {},
-    extension: {
-      getBackgroundPage: () => {
-        return {
-          TW,
-        };
-      },
-    },
+  global.browser.extension.getBackgroundPage = () => {
+    return {
+      TW,
+    };
   };
 });
 
 afterEach(() => {
-  window.chrome = {};
+  global.browser.extension.getBackgroundPage = getBackgroundPageSave;
 });
 
 describe("wrangleTabs", () => {
   test("should wrangle new tabs", () => {
-    window.TW.settings.get = jest.fn(() => 5); //maxTabs
-    window.chrome.tabs.remove = jest.fn();
+    global.TW.settings.get = jest.fn(() => 5); //maxTabs
+    global.browser.tabs.remove = jest.fn();
 
     const testTabs = [{ id: 2 }, { id: 3 }, { id: 4 }];
     TabManager.closedTabs.wrangleTabs(testTabs);
 
-    expect(window.chrome.tabs.remove.mock.calls.length).toBe(3);
-    expect(window.chrome.tabs.remove.mock.calls).toEqual([[2], [3], [4]]);
+    expect(global.browser.tabs.remove.mock.calls.length).toBe(3);
+    expect(global.browser.tabs.remove.mock.calls).toEqual([[2], [3], [4]]);
 
-    const setSavedTabsAction = window.TW.store
+    const setSavedTabsAction = global.TW.store
       .getActions()
       .find((action) => action.type === "SET_SAVED_TABS");
     expect(setSavedTabsAction).toBeDefined();
@@ -71,30 +64,30 @@ describe("wrangleTabs", () => {
   });
 
   test("should wrangle max tabs", () => {
-    window.TW.settings.get = jest.fn(() => 3);
-    window.chrome.tabs.remove = jest.fn();
+    global.TW.settings.get = jest.fn(() => 3);
+    global.browser.tabs.remove = jest.fn();
 
     const testTabs = [{ id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
-    window.chrome.storage.local.set = jest.fn();
+    global.browser.storage.local.set = jest.fn();
 
-    window.chrome.browserAction.setBadgeText = jest.fn();
+    global.browser.browserAction.setBadgeText = jest.fn();
     TabManager.closedTabs.wrangleTabs(testTabs);
 
-    expect(window.chrome.tabs.remove.mock.calls.length).toBe(4);
-    expect(window.chrome.tabs.remove.mock.calls).toEqual([[2], [3], [4], [5]]);
-    expect(window.TW.store.getActions()).toContainEqual({
+    expect(global.browser.tabs.remove.mock.calls.length).toBe(4);
+    expect(global.browser.tabs.remove.mock.calls).toEqual([[2], [3], [4], [5]]);
+    expect(global.TW.store.getActions()).toContainEqual({
       totalTabsWrangled: 4,
       type: "SET_TOTAL_TABS_WRANGLED",
     });
   });
 
   test("replaces duplicate tab in the corral if exact URL matches", () => {
-    window.TW.settings.get = jest
+    global.TW.settings.get = jest
       .fn()
       .mockImplementationOnce(() => 100)
       .mockImplementationOnce(() => "exactURLMatch");
-    window.chrome.tabs.remove = jest.fn();
-    window.TW.store = configureMockStore({
+    global.browser.tabs.remove = jest.fn();
+    global.TW.store = configureMockStore({
       localStorage: {
         savedTabs: [
           { id: 1, url: "https://www.github.com" },
@@ -104,8 +97,8 @@ describe("wrangleTabs", () => {
       },
     });
 
-    window.chrome.storage.local.set = jest.fn();
-    window.chrome.browserAction.setBadgeText = jest.fn();
+    global.browser.storage.local.set = jest.fn();
+    global.browser.browserAction.setBadgeText = jest.fn();
 
     // reset all mocks
     jest.clearAllMocks();
@@ -114,9 +107,9 @@ describe("wrangleTabs", () => {
 
     TabManager.closedTabs.wrangleTabs(testTabs);
 
-    expect(window.chrome.tabs.remove.mock.calls.length).toBe(1);
-    expect(window.chrome.tabs.remove.mock.calls).toEqual([[4]]);
-    expect(window.TW.store.getActions()).toContainEqual({
+    expect(global.browser.tabs.remove.mock.calls.length).toBe(1);
+    expect(global.browser.tabs.remove.mock.calls).toEqual([[4]]);
+    expect(global.TW.store.getActions()).toContainEqual({
       totalTabsWrangled: 1,
       type: "SET_TOTAL_TABS_WRANGLED",
     });
@@ -125,12 +118,12 @@ describe("wrangleTabs", () => {
   });
 
   test("replaces duplicate tab in the corral if hostname and title match", () => {
-    window.TW.settings.get = jest
+    global.TW.settings.get = jest
       .fn()
       .mockImplementationOnce(() => 100)
       .mockImplementationOnce(() => "hostnameAndTitleMatch");
-    window.chrome.tabs.remove = jest.fn();
-    window.TW.store = configureMockStore({
+    global.browser.tabs.remove = jest.fn();
+    global.TW.store = configureMockStore({
       localStorage: {
         savedTabs: [
           { id: 1, url: "https://www.github.com", title: "Github" },
@@ -140,8 +133,8 @@ describe("wrangleTabs", () => {
       },
     });
 
-    window.chrome.storage.local.set = jest.fn();
-    window.chrome.browserAction.setBadgeText = jest.fn();
+    global.browser.storage.local.set = jest.fn();
+    global.browser.browserAction.setBadgeText = jest.fn();
 
     // reset all mocks
     jest.clearAllMocks();
@@ -150,9 +143,9 @@ describe("wrangleTabs", () => {
 
     TabManager.closedTabs.wrangleTabs(testTabs);
 
-    expect(window.chrome.tabs.remove.mock.calls.length).toBe(1);
-    expect(window.chrome.tabs.remove.mock.calls).toEqual([[4]]);
-    expect(window.TW.store.getActions()).toContainEqual({
+    expect(global.browser.tabs.remove.mock.calls.length).toBe(1);
+    expect(global.browser.tabs.remove.mock.calls).toEqual([[4]]);
+    expect(global.TW.store.getActions()).toContainEqual({
       totalTabsWrangled: 1,
       type: "SET_TOTAL_TABS_WRANGLED",
     });
@@ -163,7 +156,7 @@ describe("wrangleTabs", () => {
 
 describe("filter", () => {
   beforeEach(() => {
-    window.TW.store = configureMockStore({
+    global.TW.store = configureMockStore({
       localStorage: {
         savedTabs: [
           { id: 1, url: "https://www.github.com", title: "GitHub" },
