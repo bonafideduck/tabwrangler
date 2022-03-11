@@ -5,7 +5,7 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 import type { Dispatch, ThemeSettingValue } from "./Types";
 import FileSaver from "file-saver";
 import TabWrangleOption from "./TabWrangleOption";
-import { browser } from "webextension-polyfill";
+import browser from "webextension-polyfill";
 import { connect } from "react-redux";
 import cx from "classnames";
 import debounce from "lodash.debounce";
@@ -60,7 +60,7 @@ class OptionsTab extends React.Component<OptionsTabProps, OptionsTabState> {
   componentDidMount() {
     // Fetch commands only when opening the `OptionsTab` since this is the only place they're
     // needed.
-    browser.commands.getAll((commands) => {
+    browser.commands.getAll().then((commands) => {
       store.dispatch(this.props.dispatch(setCommands(commands)));
     });
 

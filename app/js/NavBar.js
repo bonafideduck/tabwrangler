@@ -3,7 +3,7 @@
 import "./NavBar.css";
 import * as React from "react";
 import PauseButton from "./PauseButton";
-import { browser } from "webextension-polyfill";
+import browser from "webextension-polyfill";
 import cx from "classnames";
 
 export type NavBarTabID = "about" | "corral" | "lock" | "options";

@@ -2,7 +2,7 @@
 
 import type { ClearTempStorageAction, SetCommandsAction } from "../reducers/tempStorageReducer";
 import type { Dispatch } from "../Types";
-import { browser } from "webextension-polyfill";
+import browser from "webextension-polyfill";
 
 export function clearTempStorage(): ClearTempStorageAction {
   return { type: "CLEAR_TEMP_STORAGE" };

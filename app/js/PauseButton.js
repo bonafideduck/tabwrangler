@@ -1,7 +1,7 @@
 /* @flow */
 
 import * as React from "react";
-import { browser } from "webextension-polyfill";
+import browser from "webextension-polyfill";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function PauseButton(): React.Node {

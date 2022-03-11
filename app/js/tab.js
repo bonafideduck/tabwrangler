@@ -1,6 +1,6 @@
 /* @flow */
 
-import { browser } from "webextension-polyfill";
+import browser from "webextension-polyfill";
 const TW = browser.extension.getBackgroundPage().TW;
 const { settings, tabmanager } = TW;
 

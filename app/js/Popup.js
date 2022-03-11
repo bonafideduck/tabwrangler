@@ -3,7 +3,7 @@
 import * as React from "react";
 import type { AppState, Dispatch } from "./Types";
 import NavBar, { type NavBarTabID } from "./NavBar";
-import { browser } from "webextension-polyfill";
+import browser from "webextension-polyfill";
 import { clearTempStorage, fetchSessions } from "./actions/tempStorageActions";
 import { useDispatch, useSelector } from "react-redux";
 import AboutTab from "./AboutTab";

@@ -1,7 +1,7 @@
 /* @flow */
 
 import * as React from "react";
-//import { browser } from "webextension-polyfill";
+import browser from "webextension-polyfill";
 
 interface Props {
   onChange: (event: SyntheticInputEvent<HTMLInputElement>) => void;

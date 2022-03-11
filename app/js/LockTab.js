@@ -3,7 +3,7 @@
 import * as React from "react";
 import { isLocked, isManuallyLockable } from "./tab";
 import OpenTabRow from "./OpenTabRow";
-import { browser } from "webextension-polyfill";
+import browser from "webextension-polyfill";
 import cx from "classnames";
 import memoize from "memoize-one";
 
